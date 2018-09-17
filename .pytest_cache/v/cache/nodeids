@@ -1,4 +1,3 @@
 [
-  "tests/test_login_empresa.py::TestLoginEmpresa::test_login_empresa",
-  "tests/test_login_empresa.py::TestLoginEmpresa::test_login_empresa_incorrecto_campos_vacios"
+  "tests/TestPublicarAviso.py::TestPublicarAviso::test_publicar_aviso"
 ]

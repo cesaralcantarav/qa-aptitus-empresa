@@ -1,0 +1,90 @@
+#from selenium import webdriver
+from page_objects import PageObject, page_element
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from paginas.PaginaLoginEmpresa import PaginaLoginEmpresa
+from paginas.PaginaLoginEmpresa import BasePage
+from selenium.webdriver.support.ui import Select
+import time
+
+class PaginaPublicarAviso(BasePage):
+
+    linkPublicarAviso = (By.LINK_TEXT,"Publica un aviso")
+    #linkPublicarAviso = (By.XPATH, "//A[@href='/empresa/publica-aviso'][text()='Publica un aviso']/../../..")
+    linkPublicar = (By.CSS_SELECTOR,"a.btn.btn_notice_publish")
+    cboTipoAviso = (By.ID, "product_id")
+    txtNombrePuesto = (By.ID, "title")
+    txtDescripcionPuesto = (By.CSS_SELECTOR, "div.notranslate.public-DraftEditor-conten")
+    #txtEmpresa = (By.LINK_TEXT, "Empresas")
+    cboNivelPuesto = (By.ID,"level_id")
+    cboAreaPuesto = (By.ID, "area_id")
+    cboModalidad = (By.ID, "contract_id")
+    txtSalarioMin = (By.ID, "salaryMin")
+    txtSalarioMax = (By.ID, "salaryMax")
+    #cboPregunta = (By.ID, "selTypeQuestions")
+    #txtPregunta1 = (By.name, "questions.0.name")
+
+    def link_publicar_aviso(self):
+        linkPublicarAvisoElement = self.driver.find_element(*PaginaPublicarAviso.linkPublicarAviso)
+        linkPublicarAvisoElement.click()
+
+    def link_publicar(self):
+        linkPublicarElement = self.driver.find_element(*PaginaPublicarAviso.linkPublicar)
+        linkPublicarElement.click()
+    
+    def cbo_tipo_aviso(self):
+        cboTipoAvisoElement = self.driver.find_element(*PaginaPublicarAviso.cboTipoAviso)
+        select = Select(cboTipoAvisoElement)
+        select.select_by_value("27")
+    
+    def set_txt_nombre_puesto(self, nombrePuesto):
+        txtNombrePuestoElement = self.driver.find_element(*PaginaPublicarAviso.txtNombrePuesto)
+        txtNombrePuestoElement.send_keys(nombrePuesto)
+    
+    def set_txt_descripcion_puesto(self, descripcionPuesto):
+        txtDescripcionPuestoElement = self.driver.find_element(*PaginaPublicarAviso.txtDescripcionPuesto)
+        txtDescripcionPuestoElement.send_keys(descripcionPuesto)
+
+    def set_cbo_nivel_puesto(self, nivelPuesto):
+        cboNivelPuestoElement = self.driver.find_element(*PaginaPublicarAviso.cboNivelPuesto)
+        cboNivelPuestoElement.send_keys(nivelPuesto)
+
+    def set_cbo_area_puesto(self, areaPuesto):
+        cboAreaPuestoElement = self.driver.find_element(*PaginaPublicarAviso.cboAreaPuesto)
+        cboAreaPuestoElement.send_keys(areaPuesto)
+
+    def set_cbo_modalidad(self, modalidad):
+        cboModalidadElement = self.driver.find_element(*PaginaPublicarAviso.cboModalidad)
+        cboModalidadElement.send_keys(modalidad)
+
+    def set_txt_salario_min(self, salarioMinimo):
+        txtSalarioMinElement = self.driver.find_element(*PaginaPublicarAviso.txtSalarioMin)
+        txtSalarioMinElement.send_keys(salarioMinimo)
+    
+    def set_txt_salario_max(self, salarioMaximo):
+        txtSalarioMaxElement = self.driver.find_element(*PaginaPublicarAviso.txtSalarioMax)
+        txtSalarioMaxElement.send_keys(salarioMaximo)
+    
+
+    def publicar_aviso(self, usuario, password, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo):
+        login = PaginaLoginEmpresa(self.driver)
+        login.link_soy_una_empresa()
+        login.link_ingresa()
+        login.set_txtUser(usuario)
+        login.set_txtPassword(password)
+        login.btn_ingresar()
+        time.sleep(5)
+        self.link_publicar_aviso()
+        self.link_publicar()
+        self.cbo_tipo_aviso()
+        self.set_txt_nombre_puesto(nombrePuesto)
+        self.set_txt_descripcion_puesto(descripcionPuesto)
+        self.set_cbo_area_puesto(areaPuesto)
+        self.set_cbo_nivel_puesto(nivelPuesto)
+        self.set_cbo_modalidad(modalidad)
+        self.set_txt_salario_min(salarioMinimo)
+        self.set_txt_salario_max(salarioMaximo)
+    
+        login.click_header_usuario()
+        login.link_cerrar_sesion()

@@ -7,7 +7,7 @@ def func_navegador():
 
 # Ingresar la url
 def func_url():
-    url = "https://pre4b.aptitus.com/"  # cambiar si es necesario
+    url = "https://pre.4a.aptitus.com/"  # cambiar si es necesario
     return url
 
 # =================================  Data Excel ================================================
