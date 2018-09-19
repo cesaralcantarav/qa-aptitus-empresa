@@ -15,13 +15,15 @@ class PaginaPublicarAviso(BasePage):
     linkPublicar = (By.CSS_SELECTOR,"a.btn.btn_notice_publish")
     cboTipoAviso = (By.ID, "product_id")
     txtNombrePuesto = (By.ID, "title")
-    txtDescripcionPuesto = (By.CSS_SELECTOR, "div.notranslate.public-DraftEditor-conten")
+    txtDescripcionPuesto = (By.CSS_SELECTOR, "div.notranslate.public-DraftEditor-content")
     #txtEmpresa = (By.LINK_TEXT, "Empresas")
     cboNivelPuesto = (By.ID,"level_id")
     cboAreaPuesto = (By.ID, "area_id")
     cboModalidad = (By.ID, "contract_id")
     txtSalarioMin = (By.ID, "salaryMin")
     txtSalarioMax = (By.ID, "salaryMax")
+    btnContinuar = (By.XPATH, "//BUTTON[@class='b-btn sc-bZQynM duLhVv']/self::BUTTON")
+    #btnContinuar = (By.ID, "formPublicOffer")
     #cboPregunta = (By.ID, "selTypeQuestions")
     #txtPregunta1 = (By.name, "questions.0.name")
 
@@ -66,6 +68,10 @@ class PaginaPublicarAviso(BasePage):
         txtSalarioMaxElement = self.driver.find_element(*PaginaPublicarAviso.txtSalarioMax)
         txtSalarioMaxElement.send_keys(salarioMaximo)
     
+    def set_btn_continuar(self):
+        btnContinuarElement = self.driver.find_element(*PaginaPublicarAviso.btnContinuar)
+        btnContinuarElement.submit()
+    
 
     def publicar_aviso(self, usuario, password, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo):
         login = PaginaLoginEmpresa(self.driver)
@@ -85,6 +91,7 @@ class PaginaPublicarAviso(BasePage):
         self.set_cbo_modalidad(modalidad)
         self.set_txt_salario_min(salarioMinimo)
         self.set_txt_salario_max(salarioMaximo)
-    
+        self.set_btn_continuar()
+        time.sleep(5)
         login.click_header_usuario()
         login.link_cerrar_sesion()
