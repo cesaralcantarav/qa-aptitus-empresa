@@ -45,7 +45,7 @@ class TestPublicarAviso(unittest.TestCase):
             salarioMax = str(rows[8])
 
             #driver = self.driver
-            print (" --- Login: " + str(i) + " --- ")
+            print (" --- Aviso: " + str(i) + " --- ")
             self.assertIn("APTiTUS.com",self.driver.title)
             pagina = PaginaPublicarAviso(self.driver)
             pagina.publicar_aviso(user, pasw, nombrePuesto, descripcionPuesto, nivelPuesto, areaPuesto, modalidad, salarioMin, salarioMax)

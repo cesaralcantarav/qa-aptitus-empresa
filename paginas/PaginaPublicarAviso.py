@@ -20,10 +20,11 @@ class PaginaPublicarAviso(BasePage):
     cboNivelPuesto = (By.ID,"level_id")
     cboAreaPuesto = (By.ID, "area_id")
     cboModalidad = (By.ID, "contract_id")
+    cboNombreEmpresa = (By.ID, "company_display_type")
     txtSalarioMin = (By.ID, "salaryMin")
     txtSalarioMax = (By.ID, "salaryMax")
-    btnContinuar = (By.XPATH, "//BUTTON[@class='b-btn sc-bZQynM duLhVv']/self::BUTTON")
-    #btnContinuar = (By.ID, "formPublicOffer")
+    btnContinuar = (By.CSS_SELECTOR, "button.b-btn.sc-ifAKCX.gWnPIL")
+    btnPublicar = (By.XPATH, "//BUTTON[@type='submit']/../..")
     #cboPregunta = (By.ID, "selTypeQuestions")
     #txtPregunta1 = (By.name, "questions.0.name")
 
@@ -60,6 +61,11 @@ class PaginaPublicarAviso(BasePage):
         cboModalidadElement = self.driver.find_element(*PaginaPublicarAviso.cboModalidad)
         cboModalidadElement.send_keys(modalidad)
 
+    def set_cbo_nombre_empresa(self):
+        cboNombreEmpresaElement = self.driver.find_element(*PaginaPublicarAviso.cboNombreEmpresa)
+        select = Select(cboNombreEmpresaElement)
+        select.select_by_value("hidden")
+
     def set_txt_salario_min(self, salarioMinimo):
         txtSalarioMinElement = self.driver.find_element(*PaginaPublicarAviso.txtSalarioMin)
         txtSalarioMinElement.send_keys(salarioMinimo)
@@ -70,7 +76,11 @@ class PaginaPublicarAviso(BasePage):
     
     def set_btn_continuar(self):
         btnContinuarElement = self.driver.find_element(*PaginaPublicarAviso.btnContinuar)
-        btnContinuarElement.submit()
+        btnContinuarElement.click()
+
+    def set_btn_publicar(self):
+        btnPublicarElement = self.driver.find_element(*PaginaPublicarAviso.btnPublicar)
+        btnPublicarElement.submit()
     
 
     def publicar_aviso(self, usuario, password, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo):
@@ -89,9 +99,12 @@ class PaginaPublicarAviso(BasePage):
         self.set_cbo_area_puesto(areaPuesto)
         self.set_cbo_nivel_puesto(nivelPuesto)
         self.set_cbo_modalidad(modalidad)
+        self.set_cbo_nombre_empresa()
         self.set_txt_salario_min(salarioMinimo)
         self.set_txt_salario_max(salarioMaximo)
         self.set_btn_continuar()
+        time.sleep(5)
+        self.set_btn_publicar()
         time.sleep(5)
         login.click_header_usuario()
         login.link_cerrar_sesion()
