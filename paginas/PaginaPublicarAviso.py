@@ -27,6 +27,7 @@ class PaginaPublicarAviso(BasePage):
     btnPublicar = (By.XPATH, "//BUTTON[@type='submit']/../..")
     #cboPregunta = (By.ID, "selTypeQuestions")
     #txtPregunta1 = (By.name, "questions.0.name")
+    txtMensajeConfirmacion = (By.XPATH, "//P[@class='b-successful-publication_content__paragraph'][text()='¡Felicitaciones!']/../..")
 
     def link_publicar_aviso(self):
         linkPublicarAvisoElement = self.driver.find_element(*PaginaPublicarAviso.linkPublicarAviso)
@@ -81,6 +82,10 @@ class PaginaPublicarAviso(BasePage):
     def set_btn_publicar(self):
         btnPublicarElement = self.driver.find_element(*PaginaPublicarAviso.btnPublicar)
         btnPublicarElement.submit()
+
+    def get_txt_mensaje_confirmacion(self):
+        txtMensajeConfirmacionElement = self.driver.find_element(*PaginaPublicarAviso.txtMensajeConfirmacion)
+        return txtMensajeConfirmacionElement.text
     
 
     def publicar_aviso(self, usuario, password, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo):
@@ -99,12 +104,12 @@ class PaginaPublicarAviso(BasePage):
         self.set_cbo_area_puesto(areaPuesto)
         self.set_cbo_nivel_puesto(nivelPuesto)
         self.set_cbo_modalidad(modalidad)
-        self.set_cbo_nombre_empresa()
+        #self.set_cbo_nombre_empresa()
         self.set_txt_salario_min(salarioMinimo)
         self.set_txt_salario_max(salarioMaximo)
         self.set_btn_continuar()
         time.sleep(5)
         self.set_btn_publicar()
         time.sleep(5)
-        login.click_header_usuario()
-        login.link_cerrar_sesion()
+        #login.click_header_usuario()
+        #login.link_cerrar_sesion()

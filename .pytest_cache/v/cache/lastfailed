@@ -1,5 +1,3 @@
 {
-  "tests/TestLoginEmpresa.py::TestLoginEmpresa::test_login_empresa": true,
-  "tests/TestLoginEmpresa.py::TestLoginEmpresa::test_login_empresa_incorrecto_campos_vacios": true,
   "tests/test_login_empresa.py::TestLoginEmpresa::test_login_empresa_incorrecto_email_vacio": true
 }
