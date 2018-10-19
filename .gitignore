@@ -1,0 +1,6 @@
+# Distribution / packaging
+__pycache__
+.pytest_cache
+debug.log
+# Visual Studio Code
+.vscode

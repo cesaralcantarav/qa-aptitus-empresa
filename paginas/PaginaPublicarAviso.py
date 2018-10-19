@@ -2,7 +2,6 @@
 from page_objects import PageObject, page_element
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from paginas.PaginaLoginEmpresa import PaginaLoginEmpresa
 from paginas.PaginaLoginEmpresa import BasePage
 from selenium.webdriver.support.ui import Select
@@ -13,21 +12,23 @@ class PaginaPublicarAviso(BasePage):
     linkPublicarAviso = (By.LINK_TEXT,"Publica un aviso")
     #linkPublicarAviso = (By.XPATH, "//A[@href='/empresa/publica-aviso'][text()='Publica un aviso']/../../..")
     linkPublicar = (By.CSS_SELECTOR,"a.btn.btn_notice_publish")
-    cboTipoAviso = (By.ID, "product_id")
+    cboTipoAviso = (By.ID, "productId")
     txtNombrePuesto = (By.ID, "title")
     txtDescripcionPuesto = (By.CSS_SELECTOR, "div.notranslate.public-DraftEditor-content")
     #txtEmpresa = (By.LINK_TEXT, "Empresas")
-    cboNivelPuesto = (By.ID,"level_id")
-    cboAreaPuesto = (By.ID, "area_id")
-    cboModalidad = (By.ID, "contract_id")
-    cboNombreEmpresa = (By.ID, "company_display_type")
+    cboNivelPuesto = (By.ID,"levelId")
+    cboAreaPuesto = (By.ID, "areaId")
+    cboModalidad = (By.ID, "contractId")
+    cboNombreEmpresa = (By.ID, "companyDisplayType")
     txtSalarioMin = (By.ID, "salaryMin")
     txtSalarioMax = (By.ID, "salaryMax")
-    btnContinuar = (By.CSS_SELECTOR, "button.b-btn.sc-ifAKCX.gWnPIL")
+    btnContinuar = (By.CSS_SELECTOR, "button.b-btn.sc-gzVnrw.kccGNS")
     btnPublicar = (By.XPATH, "//BUTTON[@type='submit']/../..")
     #cboPregunta = (By.ID, "selTypeQuestions")
     #txtPregunta1 = (By.name, "questions.0.name")
+    txtDatosAviso = (By.XPATH, "//DIV[@class='b-process-header_title sc-htoDjs mZUUH'][text()='Datos de tu aviso']/../../..")
     txtMensajeConfirmacion = (By.XPATH, "//P[@class='b-successful-publication_content__paragraph'][text()='¡Felicitaciones!']/../..")
+
 
     def link_publicar_aviso(self):
         linkPublicarAvisoElement = self.driver.find_element(*PaginaPublicarAviso.linkPublicarAviso)
@@ -77,11 +78,16 @@ class PaginaPublicarAviso(BasePage):
     
     def set_btn_continuar(self):
         btnContinuarElement = self.driver.find_element(*PaginaPublicarAviso.btnContinuar)
-        btnContinuarElement.click()
+        #btnContinuarElement.click()
+        self.driver.execute_script("arguments[0].click();", btnContinuarElement)
 
     def set_btn_publicar(self):
         btnPublicarElement = self.driver.find_element(*PaginaPublicarAviso.btnPublicar)
         btnPublicarElement.submit()
+
+    def get_txt_datos_aviso(self):
+        txtDatosAvisoElement = self.driver.find_element(*PaginaPublicarAviso.txtDatosAviso)
+        txtDatosAvisoElement.text
 
     def get_txt_mensaje_confirmacion(self):
         txtMensajeConfirmacionElement = self.driver.find_element(*PaginaPublicarAviso.txtMensajeConfirmacion)

@@ -22,3 +22,13 @@ def driver_chrome():
     dr = os.getcwd()
     rutad = dr + "/drivers/chromedriver.exe"
     return rutad
+
+def driver_firefox():
+    dr = os.getcwd()
+    rutad = dr + "/drivers/geckodriver.exe"
+    return rutad
+
+def driver_iexplorer():
+    dr = os.getcwd()
+    rutad = dr + "/drivers/IEDriverServer.exe"
+    return rutad
