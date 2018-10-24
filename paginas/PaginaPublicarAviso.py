@@ -22,11 +22,18 @@ class PaginaPublicarAviso(BasePage):
     cboNombreEmpresa = (By.ID, "companyDisplayType")
     txtSalarioMin = (By.ID, "salaryMin")
     txtSalarioMax = (By.ID, "salaryMax")
+    clickRequisitos = (By.XPATH, "//DIV[@class='b-section-requirements_title']/self::DIV")
+    txtExperienciaMinima = (By.ID, "experienceMin")
+    cboArea = (By.ID, "experienceArea")
+    cboEstudios = (By.ID, "studies.0.gradeId")
+    cboAreaEstudios = (By.CSS_SELECTOR, "span.sc-Rmtcm.ccoQXc")
+    cboIdioma = (By.ID, "languages.0.languageId")
+    cboNivelIdioma = (By.ID, "languages.0.level")
     btnContinuar = (By.CSS_SELECTOR, "button.b-btn.sc-gzVnrw.kccGNS")
     btnPublicar = (By.XPATH, "//BUTTON[@type='submit']/../..")
     #cboPregunta = (By.ID, "selTypeQuestions")
     #txtPregunta1 = (By.name, "questions.0.name")
-    txtDatosAviso = (By.XPATH, "//DIV[@class='b-process-header_title sc-htoDjs mZUUH'][text()='Datos de tu aviso']/../../..")
+    txtDatosAviso = (By.XPATH, "//H2[@class='b-process-product-type_title b-process-product-type_title--label'][text()='Tipo del aviso']/../../../../..")
     txtMensajeConfirmacion = (By.XPATH, "//P[@class='b-successful-publication_content__paragraph'][text()='¡Felicitaciones!']/../..")
 
 
@@ -76,6 +83,35 @@ class PaginaPublicarAviso(BasePage):
         txtSalarioMaxElement = self.driver.find_element(*PaginaPublicarAviso.txtSalarioMax)
         txtSalarioMaxElement.send_keys(salarioMaximo)
     
+    def set_click_requisitos(self):
+        clickRequisitosElement = self.driver.find_element(*PaginaPublicarAviso.clickRequisitos)
+        self.driver.execute_script("arguments[0].click();", clickRequisitosElement)
+
+    def set_txt_experiencia_min(self, experienciaMinima):
+        txtExperienciaMinimaElement = self.driver.find_element(*PaginaPublicarAviso.txtExperienciaMinima)
+        txtExperienciaMinimaElement.clear()
+        txtExperienciaMinimaElement.send_keys(experienciaMinima)
+    
+    def set_cbo_area(self, area):
+        cboAreaElement = self.driver.find_element(*PaginaPublicarAviso.cboArea)
+        cboAreaElement.send_keys(area)
+    
+    def set_cbo_estudios(self, estudio):
+        cboEstudiosElement = self.driver.find_element(*PaginaPublicarAviso.cboEstudios)
+        cboEstudiosElement.send_keys(estudio)
+    
+    def set_cbo_area_estudios(self, areaEstudio):
+        cboAreaEstudiosElement = self.driver.find_element(*PaginaPublicarAviso.cboAreaEstudios)
+        cboAreaEstudiosElement.send_keys(areaEstudio)
+    
+    def set_cbo_idioma(self, idioma):
+        cboIdiomaElement = self.driver.find_element(*PaginaPublicarAviso.cboIdioma)
+        cboIdiomaElement.send_keys(idioma)
+    
+    def set_cbo_nivel_idioma(self, nivelIdioma):
+        cboNivelIdiomaElement = self.driver.find_element(*PaginaPublicarAviso.cboNivelIdioma)
+        cboNivelIdiomaElement.send_keys(nivelIdioma)
+    
     def set_btn_continuar(self):
         btnContinuarElement = self.driver.find_element(*PaginaPublicarAviso.btnContinuar)
         #btnContinuarElement.click()
@@ -94,7 +130,8 @@ class PaginaPublicarAviso(BasePage):
         return txtMensajeConfirmacionElement.text
     
 
-    def publicar_aviso(self, usuario, password, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo):
+    def publicar_aviso(self, usuario, password, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo,
+                        experienciaMinima, area, estudio, areaEstudio, idioma, nivelIdioma):
         login = PaginaLoginEmpresa(self.driver)
         login.link_soy_una_empresa()
         login.link_ingresa()
@@ -113,6 +150,14 @@ class PaginaPublicarAviso(BasePage):
         #self.set_cbo_nombre_empresa()
         self.set_txt_salario_min(salarioMinimo)
         self.set_txt_salario_max(salarioMaximo)
+        #self.set_click_requisitos()
+        time.sleep(2)
+        self.set_txt_experiencia_min(experienciaMinima)
+        self.set_cbo_area(area)
+        #self.set_cbo_estudios(estudio)
+        #self.set_cbo_area_estudios(areaEstudio)
+        self.set_cbo_idioma(idioma)
+        self.set_cbo_nivel_idioma(nivelIdioma)
         self.set_btn_continuar()
         time.sleep(5)
         self.set_btn_publicar()

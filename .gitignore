@@ -2,5 +2,6 @@
 __pycache__
 .pytest_cache
 debug.log
+tests/__pycache__
 # Visual Studio Code
 .vscode
