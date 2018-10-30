@@ -29,6 +29,7 @@ class PaginaPublicarAviso(BasePage):
     cboAreaEstudios = (By.CSS_SELECTOR, "span.sc-Rmtcm.ccoQXc")
     cboIdioma = (By.ID, "languages.0.languageId")
     cboNivelIdioma = (By.ID, "languages.0.level")
+    txtConocimiento = (By. XPATH, "//INPUT[@type='text']/self::INPUT")
     btnContinuar = (By.CSS_SELECTOR, "button.b-btn.sc-gzVnrw.kccGNS")
     btnPublicar = (By.XPATH, "//BUTTON[@type='submit']/../..")
     #cboPregunta = (By.ID, "selTypeQuestions")
