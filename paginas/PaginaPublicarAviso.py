@@ -23,6 +23,11 @@ class PaginaPublicarAviso(BasePage):
     txtSalarioMin = (By.ID, "salaryMin")
     txtSalarioMax = (By.ID, "salaryMax")
     clickRequisitos = (By.XPATH, "//DIV[@class='b-section-requirements_title']/self::DIV")
+    radioGeneroIndistinto = (By.XPATH, "//SPAN[@class='b-radio_span'][text()='Indistinto']/self::SPAN")
+    radioGeneroMasculino = (By.XPATH, "//SPAN[@class='b-radio_span'][text()='Masculino']/self::SPAN")
+    radioGeneroFemenino = (By.XPATH, "//SPAN[@class='b-radio_span'][text()='Femenino']/self::SPAN")
+    txtEdadMin = (By.ID, "ageMin")
+    txtEdadMax = (By.ID, "ageMax")
     txtExperienciaMinima = (By.ID, "experienceMin")
     cboArea = (By.ID, "experienceArea")
     cboEstudios = (By.ID, "studies.0.gradeId")
@@ -37,7 +42,6 @@ class PaginaPublicarAviso(BasePage):
     txtDatosAviso = (By.XPATH, "//H2[@class='b-process-product-type_title b-process-product-type_title--label'][text()='Tipo del aviso']/../../../../..")
     txtMensajeConfirmacion = (By.XPATH, "//P[@class='b-successful-publication_content__paragraph'][text()='¡Felicitaciones!']/../..")
 
-
     def link_publicar_aviso(self):
         linkPublicarAvisoElement = self.driver.find_element(*PaginaPublicarAviso.linkPublicarAviso)
         linkPublicarAvisoElement.click()
@@ -46,10 +50,15 @@ class PaginaPublicarAviso(BasePage):
         linkPublicarElement = self.driver.find_element(*PaginaPublicarAviso.linkPublicar)
         linkPublicarElement.click()
     
-    def cbo_tipo_aviso(self):
+    def cbo_tipo_aviso(self, tipoAviso):
         cboTipoAvisoElement = self.driver.find_element(*PaginaPublicarAviso.cboTipoAviso)
         select = Select(cboTipoAvisoElement)
-        select.select_by_value("27")
+        if tipoAviso == 'Premium':
+            select.select_by_value("27")
+        if tipoAviso == 'Destacado':
+            select.select_by_value("28")
+        else:
+            select.select_by_value("29")       
     
     def set_txt_nombre_puesto(self, nombrePuesto):
         txtNombrePuestoElement = self.driver.find_element(*PaginaPublicarAviso.txtNombrePuesto)
@@ -87,6 +96,25 @@ class PaginaPublicarAviso(BasePage):
     def set_click_requisitos(self):
         clickRequisitosElement = self.driver.find_element(*PaginaPublicarAviso.clickRequisitos)
         self.driver.execute_script("arguments[0].click();", clickRequisitosElement)
+    
+    def set_radio_genero(self, genero):
+        radioGeneroIndistintoElement = self.driver.find_element(*PaginaPublicarAviso.radioGeneroIndistinto)
+        radioGeneroMasculinoElement = self.driver.find_element(*PaginaPublicarAviso.radioGeneroMasculino)
+        radioGeneroFemeninoElement = self.driver.find_element(*PaginaPublicarAviso.radioGeneroFemenino)
+        if genero == "I":
+            self.driver.execute_script("arguments[0].click();", radioGeneroIndistintoElement)
+        if genero == "M":
+            self.driver.execute_script("arguments[0].click();", radioGeneroMasculinoElement)
+        else:
+            self.driver.execute_script("arguments[0].click();", radioGeneroFemeninoElement)
+
+    def set_txt_edad_minima(self, edadMin):
+        edadMinElement = self.driver.find_element(*PaginaPublicarAviso.txtEdadMin)
+        edadMinElement.send_keys(edadMin)
+    
+    def set_txt_edad_maxima(self, edadMax):
+        edadMaxElement = self.driver.find_element(*PaginaPublicarAviso.txtEdadMax)
+        edadMaxElement.send_keys(edadMax)
 
     def set_txt_experiencia_min(self, experienciaMinima):
         txtExperienciaMinimaElement = self.driver.find_element(*PaginaPublicarAviso.txtExperienciaMinima)
@@ -130,9 +158,8 @@ class PaginaPublicarAviso(BasePage):
         txtMensajeConfirmacionElement = self.driver.find_element(*PaginaPublicarAviso.txtMensajeConfirmacion)
         return txtMensajeConfirmacionElement.text
     
-
-    def publicar_aviso(self, usuario, password, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo,
-                        experienciaMinima, area, estudio, areaEstudio, idioma, nivelIdioma):
+    def publicar_aviso(self, usuario, password, tipoAviso, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo, genero,
+                        edadMin, edadMax, experienciaMinima, area, estudio, areaEstudio, idioma, nivelIdioma):
         login = PaginaLoginEmpresa(self.driver)
         login.link_soy_una_empresa()
         login.link_ingresa()
@@ -142,7 +169,7 @@ class PaginaPublicarAviso(BasePage):
         time.sleep(5)
         self.link_publicar_aviso()
         self.link_publicar()
-        self.cbo_tipo_aviso()
+        self.cbo_tipo_aviso(tipoAviso)
         self.set_txt_nombre_puesto(nombrePuesto)
         self.set_txt_descripcion_puesto(descripcionPuesto)
         self.set_cbo_area_puesto(areaPuesto)
@@ -152,7 +179,10 @@ class PaginaPublicarAviso(BasePage):
         self.set_txt_salario_min(salarioMinimo)
         self.set_txt_salario_max(salarioMaximo)
         #self.set_click_requisitos()
-        time.sleep(2)
+        time.sleep(1)
+        self.set_radio_genero(genero)
+        self.set_txt_edad_minima(edadMin)
+        self.set_txt_edad_maxima(edadMax)
         self.set_txt_experiencia_min(experienciaMinima)
         self.set_cbo_area(area)
         #self.set_cbo_estudios(estudio)

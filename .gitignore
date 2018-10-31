@@ -4,5 +4,6 @@ __pycache__
 debug.log
 tests/__pycache__
 venv
+resultado.txt
 # Visual Studio Code
 .vscode
