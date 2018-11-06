@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from paginas.PaginaLoginEmpresa import PaginaLoginEmpresa
 from paginas.PaginaLoginEmpresa import BasePage
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.keys import Keys
 import time
 
 class PaginaPublicarAviso(BasePage):
@@ -26,15 +27,23 @@ class PaginaPublicarAviso(BasePage):
     radioGeneroIndistinto = (By.XPATH, "//SPAN[@class='b-radio_span'][text()='Indistinto']/self::SPAN")
     radioGeneroMasculino = (By.XPATH, "//SPAN[@class='b-radio_span'][text()='Masculino']/self::SPAN")
     radioGeneroFemenino = (By.XPATH, "//SPAN[@class='b-radio_span'][text()='Femenino']/self::SPAN")
+    chckGeneroExcluyente = (By.ID, "genderIsExcluding")
     txtEdadMin = (By.ID, "ageMin")
     txtEdadMax = (By.ID, "ageMax")
+    chckEdadExcluyente = (By.ID, "ageIsExcluding")
     txtExperienciaMinima = (By.ID, "experienceMin")
     cboArea = (By.ID, "experienceArea")
+    chckExperienciaExcluyente = (By.ID, "experienceIsExcluding")
     cboEstudios = (By.ID, "studies.0.gradeId")
-    cboAreaEstudios = (By.CSS_SELECTOR, "span.sc-Rmtcm.ccoQXc")
+    cboAreaEstudios = (By.XPATH, "//DIV[@class='b-select sc-kjoXOD ixTfKM']/self::DIV")
+    chckAreaEstudios = (By.XPATH, "//LABEL[@class='b-checkbox_label']/self::LABEL")
+    chckEstudiosExcluyente = (By.ID, "studies.0.required")
     cboIdioma = (By.ID, "languages.0.languageId")
     cboNivelIdioma = (By.ID, "languages.0.level")
-    txtConocimiento = (By. XPATH, "//INPUT[@type='text']/self::INPUT")
+    chckIdiomaExcluyente = (By.ID, "languages.1.required")
+    #txtConocimiento = "programs"
+    cboConocimiento = (By.ID, "react-autowhatever-1--item-0")
+    chckConocimientoExcluyente = (By.ID, "programsIsExcluding")
     btnContinuar = (By.CSS_SELECTOR, "button.b-btn.sc-gzVnrw.kccGNS")
     btnPublicar = (By.XPATH, "//BUTTON[@type='submit']/../..")
     #cboPregunta = (By.ID, "selTypeQuestions")
@@ -108,6 +117,11 @@ class PaginaPublicarAviso(BasePage):
         else:
             self.driver.execute_script("arguments[0].click();", radioGeneroFemeninoElement)
 
+    def set_chck_genero_excluyente(self, generoExcluyente):
+        chckGeneroExcluyenteElement = self.driver.find_element(*PaginaPublicarAviso.chckGeneroExcluyente)
+        if generoExcluyente == "Si":
+            self.driver.execute_script("arguments[0].click();", chckGeneroExcluyenteElement)
+
     def set_txt_edad_minima(self, edadMin):
         edadMinElement = self.driver.find_element(*PaginaPublicarAviso.txtEdadMin)
         edadMinElement.send_keys(edadMin)
@@ -131,7 +145,9 @@ class PaginaPublicarAviso(BasePage):
     
     def set_cbo_area_estudios(self, areaEstudio):
         cboAreaEstudiosElement = self.driver.find_element(*PaginaPublicarAviso.cboAreaEstudios)
-        cboAreaEstudiosElement.send_keys(areaEstudio)
+        chckAreaEstudiosElement = self.driver.find_element(*PaginaPublicarAviso.chckAreaEstudios)
+        cboAreaEstudiosElement.click()
+        chckAreaEstudiosElement.send_keys(areaEstudio)
     
     def set_cbo_idioma(self, idioma):
         cboIdiomaElement = self.driver.find_element(*PaginaPublicarAviso.cboIdioma)
@@ -140,7 +156,14 @@ class PaginaPublicarAviso(BasePage):
     def set_cbo_nivel_idioma(self, nivelIdioma):
         cboNivelIdiomaElement = self.driver.find_element(*PaginaPublicarAviso.cboNivelIdioma)
         cboNivelIdiomaElement.send_keys(nivelIdioma)
-    
+
+    def set_txt_conocimiento(self, conocimiento):
+        txtConocimientoElement = self.driver.find_element_by_name("programs")
+        txtConocimientoElement.send_keys(conocimiento)
+        cboConocimientoElement = self.driver.find_element(*PaginaPublicarAviso.cboConocimiento)
+        time.sleep(1)
+        cboConocimientoElement.click()
+        
     def set_btn_continuar(self):
         btnContinuarElement = self.driver.find_element(*PaginaPublicarAviso.btnContinuar)
         #btnContinuarElement.click()
@@ -159,7 +182,7 @@ class PaginaPublicarAviso(BasePage):
         return txtMensajeConfirmacionElement.text
     
     def publicar_aviso(self, usuario, password, tipoAviso, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo, genero,
-                        edadMin, edadMax, experienciaMinima, area, estudio, areaEstudio, idioma, nivelIdioma):
+                        generoExcluyente, edadMin, edadMax, experienciaMinima, area, estudio, areaEstudio, idioma, nivelIdioma, conocimiento):
         login = PaginaLoginEmpresa(self.driver)
         login.link_soy_una_empresa()
         login.link_ingresa()
@@ -181,6 +204,8 @@ class PaginaPublicarAviso(BasePage):
         #self.set_click_requisitos()
         time.sleep(1)
         self.set_radio_genero(genero)
+        time.sleep(1)
+        self.set_chck_genero_excluyente(generoExcluyente)
         self.set_txt_edad_minima(edadMin)
         self.set_txt_edad_maxima(edadMax)
         self.set_txt_experiencia_min(experienciaMinima)
@@ -189,6 +214,8 @@ class PaginaPublicarAviso(BasePage):
         #self.set_cbo_area_estudios(areaEstudio)
         self.set_cbo_idioma(idioma)
         self.set_cbo_nivel_idioma(nivelIdioma)
+        self.set_txt_conocimiento(conocimiento)
+        time.sleep(2)
         self.set_btn_continuar()
         time.sleep(5)
         self.set_btn_publicar()
