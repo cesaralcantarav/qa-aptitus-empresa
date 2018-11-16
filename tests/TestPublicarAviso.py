@@ -48,6 +48,7 @@ class TestPublicarAviso(unittest.TestCase):
             generoExcluyente = str(rows[11])
             edadMin = int(rows[12])
             edadMax = int(rows[13])
+            edadExcluyente = str(rows[14])
             experienciaMinima = int(rows[17])
             area = str(rows[18])
             estudio = str(rows[20])
@@ -61,7 +62,7 @@ class TestPublicarAviso(unittest.TestCase):
             self.assertIn("APTiTUS.com",self.driver.title)
             pagina = PaginaPublicarAviso(self.driver)
             pagina.publicar_aviso(user, pasw, tipoAviso, nombrePuesto, descripcionPuesto, nivelPuesto, areaPuesto, modalidad, salarioMin, salarioMax, genero,
-                                    generoExcluyente, edadMin, edadMax, experienciaMinima, area, estudio, areaEstudio, idioma, nivelIdioma, conocimiento)
+                                    generoExcluyente, edadMin, edadMax, edadExcluyente, experienciaMinima, area, estudio, areaEstudio, idioma, nivelIdioma, conocimiento)
             self.assertEqual("¡Felicitaciones!\nTu aviso se ha publicado exitosamente", pagina.get_txt_mensaje_confirmacion())
             print("Test Publicar Aviso " + tipoAviso + " OK")
             self.driver.quit()

@@ -124,11 +124,18 @@ class PaginaPublicarAviso(BasePage):
 
     def set_txt_edad_minima(self, edadMin):
         edadMinElement = self.driver.find_element(*PaginaPublicarAviso.txtEdadMin)
-        edadMinElement.send_keys(edadMin)
+        if edadMin != 0:
+            edadMinElement.send_keys(edadMin)
     
     def set_txt_edad_maxima(self, edadMax):
         edadMaxElement = self.driver.find_element(*PaginaPublicarAviso.txtEdadMax)
-        edadMaxElement.send_keys(edadMax)
+        if edadMax != 0:
+            edadMaxElement.send_keys(edadMax)
+
+    def set_chck_edad_excluyente(self, edadExcluyente):
+        chckEdadExcluyenteElement = self.driver.find_element(*PaginaPublicarAviso.chckEdadExcluyente)
+        if edadExcluyente == "Si":
+            self.driver.execute_script("arguments[0].click();", chckEdadExcluyenteElement)
 
     def set_txt_experiencia_min(self, experienciaMinima):
         txtExperienciaMinimaElement = self.driver.find_element(*PaginaPublicarAviso.txtExperienciaMinima)
@@ -182,7 +189,7 @@ class PaginaPublicarAviso(BasePage):
         return txtMensajeConfirmacionElement.text
     
     def publicar_aviso(self, usuario, password, tipoAviso, nombrePuesto, descripcionPuesto, areaPuesto, nivelPuesto, modalidad, salarioMinimo, salarioMaximo, genero,
-                        generoExcluyente, edadMin, edadMax, experienciaMinima, area, estudio, areaEstudio, idioma, nivelIdioma, conocimiento):
+                        generoExcluyente, edadMin, edadMax, edadExcluyente, experienciaMinima, area, estudio, areaEstudio, idioma, nivelIdioma, conocimiento):
         login = PaginaLoginEmpresa(self.driver)
         login.link_soy_una_empresa()
         login.link_ingresa()
@@ -208,6 +215,8 @@ class PaginaPublicarAviso(BasePage):
         self.set_chck_genero_excluyente(generoExcluyente)
         self.set_txt_edad_minima(edadMin)
         self.set_txt_edad_maxima(edadMax)
+        time.sleep(1)
+        self.set_chck_edad_excluyente(edadExcluyente)
         self.set_txt_experiencia_min(experienciaMinima)
         self.set_cbo_area(area)
         #self.set_cbo_estudios(estudio)
